@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>TZ_JS</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="tools">
+    <form id="filter">
+        <label>
+            <span>Phrase for filter:</span>
+            <input type="text" id="filter-input">
+        </label>
+        <button id="filter-btn">
+            Find
+        </button>
+    </form>
+
+    <form id="searchCols">
+        <span> Search in:</span>
+        <label>
+            <input type="checkbox" name="check0" id="check0" checked>
+            Идентификатор
+        </label>
+        <label>
+            <input type="checkbox" name="check1" id="check1" checked>
+            Имя
+        </label>
+        <label>
+            <input type="checkbox" name="check2" id="check2" checked>
+            Фамилия
+        </label>
+        <label>
+            <input type="checkbox" name="check3" id="check3" checked>
+            Пол
+        </label>
+        <label>
+            <input type="checkbox" name="check4" id="check4" checked>
+            Ключевые фразы
+        </label>
+    </form>
+</div>
+<div id="hideCols">
+    <span>Choose columns to hide:</span>
+    <button class="ActiveBtn" id="b0">Идентификатор</button>
+    <button class="ActiveBtn" id="b1">Имя</button>
+    <button class="ActiveBtn" id="b2">Фамилия</button>
+    <button class="ActiveBtn" id="b3">Пол</button>
+    <button class="ActiveBtn" id="b4">Ключевые фразы</button>
+    <button class="ActiveBtn" id="b5">Изображения</button>
+</div>
+
+<div id="findLabel" class="hidden"></div>
+
+<div id="tablearea"></div>
+
+<script type="module" src="script.js" async></script>
+</body>
+</html>
