@@ -1,3 +1,4 @@
+//TODO: Комментировать код
 import data from "./json.js";
 
 let headings = ["Идентификатор", "Имя", "Фамилия", "Пол", "Ключевые фразы", "Изображение"];
@@ -66,14 +67,17 @@ function createTable(data, headings) {
 
 function highlight(phrase, table) {
     let pattern = new RegExp(phrase.trim(),'ig');
+    let count = 0;
     for (let i = 1; i < rowNum + 1; i++){
         if (!table.rows[i].classList.contains('notFind'))
         for (let j = 0; j < colNum - 1; j++) {
             if (~table.rows[i].cells[j].innerHTML.toUpperCase().indexOf(phrase.trim().toUpperCase()) && phrase.trim()!=="") {
+                count += table.rows[i].cells[j].innerHTML.match(pattern).length;
                 table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(pattern, '<span class="highlight">$&</span>');
             }
         }
     }
+    return count;
 }
 
 function deleteOldSpans(table) {
@@ -106,11 +110,12 @@ function filter(phrase, table, e) {
         }
         else table.rows[i].classList.add('notFind');
     }
-    highlight(phrase, table);
+    let count = highlight(phrase, table);
     let findLabel = document.getElementById("findLabel");
     findLabel.innerHTML = `Number of rows found: ${75-document.getElementsByClassName('notFind').length}`;
+    if (count) findLabel.innerHTML += `; Number of mathes: ${count}`;
     findLabel.classList.remove('hidden');
-    setTimeout(()=>findLabel.classList.add('hidden'), 3000); //TODO: добавить кол-во соответсвий (выделений)
+    setTimeout(()=>findLabel.classList.add('hidden'), 5000);
 }
 
 function hideCol(e) {
@@ -122,15 +127,18 @@ function hideCol(e) {
         table.rows[i].cells[num].classList.toggle('notFind');
 }
 
-document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListener('click', (e)=>hideCol(e)));
+function editRow(row) {
+    //TODO: редактирование значений строки
+}
 
 createTable(data, headings);
+
+document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListener('click', (e)=>hideCol(e)));
 
 let filter_btn = document.getElementById('filter-btn');
 let table = document.querySelectorAll('#tablearea table')[0];
 let filter_input = document.getElementById('filter-input');
 
-// hideCol(document.getElementsByTagName('table')[0], 2);
-
-
 filter_btn.addEventListener('click',(e)=>filter(filter_input.value, table, e));
+
+

@@ -78,7 +78,6 @@ html,body{
 }
 #findLabel{
     background: rgba(255,255,0,0.5);
-    width: 500px;
     height: 25px;
     position: absolute;
 }
