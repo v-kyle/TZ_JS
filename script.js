@@ -115,7 +115,6 @@ function filter(phrase, table, e) {
     findLabel.innerHTML = `Number of rows found: ${75-document.getElementsByClassName('notFind').length}`;
     if (count) findLabel.innerHTML += `; Number of mathes: ${count}`;
     findLabel.classList.remove('hidden');
-    setTimeout(()=>findLabel.classList.add('hidden'), 5000);
 }
 
 function hideCol(e) {
@@ -127,18 +126,25 @@ function hideCol(e) {
         table.rows[i].cells[num].classList.toggle('notFind');
 }
 
-function editRow(row) {
-    //TODO: редактирование значений строки
+function editRow(e) {
+    let modal = document.querySelector('.modal');
+    let table = document.querySelectorAll('#tablearea table')[0];
+    let row = e.target.closest('tr');
+    if (!row) return null;
+    else if (!table.contains(row)) return null;
+    else modal.style.display = "block";
+
 }
-
 createTable(data, headings);
-
-document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListener('click', (e)=>hideCol(e)));
 
 let filter_btn = document.getElementById('filter-btn');
 let table = document.querySelectorAll('#tablearea table')[0];
 let filter_input = document.getElementById('filter-input');
 
+document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListener('click', (e)=>hideCol(e)));
+
 filter_btn.addEventListener('click',(e)=>filter(filter_input.value, table, e));
+
+// table.addEventListener('click', (e)=>editRow(e));
 
 
