@@ -130,9 +130,7 @@ function editRow(e) {
     let modal = document.querySelector('.modal');
     let table = document.querySelectorAll('#tablearea table')[0];
     let row = e.target.closest('tr');
-    if (!row) return null;
-    else if (!table.contains(row)) return null;
-    else modal.style.display = "block";
+    if (row && table.contains(row) && row.rowIndex!==0) modal.style.display = "block";
 
 }
 createTable(data, headings);
@@ -145,6 +143,6 @@ document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListe
 
 filter_btn.addEventListener('click',(e)=>filter(filter_input.value, table, e));
 
-// table.addEventListener('click', (e)=>editRow(e));
+table.addEventListener('click', (e)=>editRow(e));
 
 
