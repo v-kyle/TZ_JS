@@ -4,14 +4,7 @@ import data from "./json.js";
 let headings = ["Идентификатор", "Имя", "Фамилия", "Пол", "Ключевые фразы", "Изображение"];
 const rowNum = data.length;
 const colNum = 6;
-let headNames = {
-  0: 'id',
-  1: 'name',
-  2: 'name',
-  3: 'gender',
-  4: 'memo',
-  5: 'img'
-};
+let headNames = ['id', 'name', 'name', 'gender', 'memo', 'img'];
 
 function checkCols() {
     let searchCols = [1,1,1,1,1];
@@ -66,12 +59,13 @@ function createTable(data, headings) {
 }
 
 function highlight(phrase, table) {
+    let arrCols = checkCols();
     let pattern = new RegExp(phrase.trim(),'ig');
     let count = 0;
     for (let i = 1; i < rowNum + 1; i++){
         if (!table.rows[i].classList.contains('notFind'))
         for (let j = 0; j < colNum - 1; j++) {
-            if (~table.rows[i].cells[j].innerHTML.toUpperCase().indexOf(phrase.trim().toUpperCase()) && phrase.trim()!=="") {
+            if (~table.rows[i].cells[j].innerHTML.toUpperCase().indexOf(phrase.trim().toUpperCase()) && phrase.trim()!=="" && arrCols[j]) {
                 count += table.rows[i].cells[j].innerHTML.match(pattern).length;
                 table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(pattern, '<span class="highlight">$&</span>');
             }
@@ -130,7 +124,7 @@ function editRow(e) {
     let modal = document.querySelector('.modal');
     let table = document.querySelectorAll('#tablearea table')[0];
     let row = e.target.closest('tr');
-    if (row && table.contains(row) && row.rowIndex!==0) modal.style.display = "block";
+    if (row && table.contains(row) && row.rowIndex!==0) modal.style.display = "flex";
 
 }
 createTable(data, headings);
