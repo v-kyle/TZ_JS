@@ -103,6 +103,7 @@ th, td {
     border: 1px solid grey;
 }
 tr:hover{
+    cursor: pointer;
     background: #bbdefb;
 }
 .notFind{
@@ -116,17 +117,17 @@ tr:hover{
 }
 
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     justify-content: center;
     align-items: center;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
 }
 .modal-content {
     margin: 0;
@@ -134,7 +135,7 @@ tr:hover{
     position: relative;
     background-color: #bbdefb;
     border: 4px solid #8aacc8;
-    width: 50%;
+    width: 25%;
     box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.4);
 }
 .close {
@@ -148,7 +149,24 @@ tr:hover{
 .close:hover{
     color: #fff;
 }
-
+.modal-body form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.modal-body input[type="text"], .modal-body textarea{
+    margin-bottom: 25px;
+}
+.modal-body>form>label{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.modal-body div span{
+    font-weight: bold;
+}
+#modal-gender, #modal-img{
+    margin-bottom: 25px;
+}
 button:active, button:focus{
     outline: none;
 }

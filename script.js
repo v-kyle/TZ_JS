@@ -124,8 +124,16 @@ function editRow(e) {
     let modal = document.querySelector('.modal');
     let table = document.querySelectorAll('#tablearea table')[0];
     let row = e.target.closest('tr');
-    if (row && table.contains(row) && row.rowIndex!==0) modal.style.display = "flex";
+    if (row && table.contains(row) && row.rowIndex!==0){
+        modal.style.display = "flex";
+        let modal_body = document.querySelector('.modal .modal-body');
 
+    }
+}
+function closeModal(e) {
+    let modal = document.querySelector('.modal');
+    let close = document.getElementsByClassName('close')[0];
+    if (e.target===modal ||e.target===close) modal.style.display = 'none';
 }
 createTable(data, headings);
 
@@ -133,10 +141,13 @@ let filter_btn = document.getElementById('filter-btn');
 let table = document.querySelectorAll('#tablearea table')[0];
 let filter_input = document.getElementById('filter-input');
 
-document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListener('click', (e)=>hideCol(e)));
+document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListener('click', hideCol));
 
 filter_btn.addEventListener('click',(e)=>filter(filter_input.value, table, e));
 
-table.addEventListener('click', (e)=>editRow(e));
+table.addEventListener('click', editRow);
+
+document.getElementsByClassName('close')[0].addEventListener('click',closeModal);
+document.getElementsByClassName('modal')[0].addEventListener('click',closeModal);
 
 

@@ -10,16 +10,16 @@
 <div id="tools">
     <form id="filter">
         <label>
-            <span>Phrase for filter:</span>
+            <span>Фраза для поиска:</span>
             <input type="text" id="filter-input">
         </label>
         <button id="filter-btn">
-            Find
+            Найти
         </button>
     </form>
 
     <form id="searchCols">
-        <span> Search in:</span>
+        <span>Колонки для поиска:</span>
         <label>
             <input type="checkbox" name="check0" id="check0" checked>
             Идентификатор
@@ -43,7 +43,7 @@
     </form>
 </div>
 <div id="hideCols">
-    <span>Choose columns to hide:</span>
+    <span>Скрыть колонки:</span>
     <button class="ActiveBtn" id="b0">Идентификатор</button>
     <button class="ActiveBtn" id="b1">Имя</button>
     <button class="ActiveBtn" id="b2">Фамилия</button>
@@ -59,8 +59,36 @@
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        Какой-то текст в теле модального окна<br>
-        Ещё другой текст...
+        <div class="modal-body">
+            <form>
+                <label for="modal-id">Идентификатор:</label>
+                <input id = "modal-id" type="text">
+                <label for="modal-first">Имя:</label>
+                <input id = "modal-first" type="text">
+                <label for="modal-last">Фамилия:</label>
+                <input id = "modal-last" type="text">
+
+                <div id="modal-gender">
+                    <span>Пол:</span>
+                    <label for="modal-gender-male">Male</label>
+                    <input type="radio" name="gender" id="modal-gender-male" value="male" checked>
+                    <label for="modal-gender-female">Female</label>
+                    <input type="radio" name="gender" id="modal-gender-female" value="female">
+                </div>
+
+                <label for="modal-memo">Ключевые фразы:</label>
+                <textarea id="modal-memo"></textarea>
+
+                <div id="modal-img">
+                    <span>Изображение:</span>
+                    <label for="modal-img-show">Показать</label>
+                    <input type="radio" name="img" id="modal-img-show" value="show" checked>
+                    <label for="modal-img-hide">Скрыть</label>
+                    <input type="radio" name="img" id="modal-img-hide" value="hide">
+                </div>
+
+            </form>
+        </div>
     </div>
 </div>
 
