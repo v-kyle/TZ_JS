@@ -75,7 +75,7 @@ function highlight(phrase, table) {
 }
 
 function deleteOldSpans(table) {
-    let deleteSpan1 = /<span class="highlight"(.*?)>/ig;
+    let deleteSpan1 = /<span class="highlight">/ig;
     let deleteSpan2 = /<\/span>/ig;
     for (let i = 1; i < rowNum +1 ; i++) {
         for (let j = 0; j < colNum - 1; j++) {
@@ -106,8 +106,8 @@ function filter(phrase, table, e) {
     }
     let count = highlight(phrase, table);
     let findLabel = document.getElementById("findLabel");
-    findLabel.innerHTML = `Number of rows found: ${75-document.getElementsByClassName('notFind').length}`;
-    if (count) findLabel.innerHTML += `; Number of mathes: ${count}`;
+    findLabel.innerHTML = `Строк найдено: ${75-document.getElementsByClassName('notFind').length}`;
+    if (count) findLabel.innerHTML += `; Совпадений: ${count}`;
     findLabel.classList.remove('hidden');
 }
 
