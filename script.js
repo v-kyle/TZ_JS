@@ -1,16 +1,15 @@
-//TODO: Комментировать код
 import data from "./json.js";
 
-let headings = ["Идентификатор", "Имя", "Фамилия", "Пол", "Ключевые фразы", "Изображение"];
+const HEADINGS = ["Идентификатор", "Имя", "Фамилия", "Пол", "Ключевые фразы", "Изображение"];
+const HEADNAMES = ['id', 'name', 'name', 'gender', 'memo', 'img'];
 const rowNum = data.length;
 const colNum = 6;
-let headNames = ['id', 'name', 'name', 'gender', 'memo', 'img'];
 
 function checkCols() {
-    let searchCols = [1,1,1,1,1];
+    let searchCols = (new Array(5)).fill(true, 0, 5);
     let checkBoxes = document.querySelectorAll('#searchCols input');
     checkBoxes.forEach((elem, index)=>{
-        if (!elem.checked) searchCols[index] = 0;
+        if (!elem.checked) searchCols[index] = false;
     });
     return searchCols;
 }
@@ -34,23 +33,27 @@ function createTable(data, headings) {
         tr[i] = document.createElement('tr');
         for (let j = 0; j < colNum; j++) {
             let td = document.createElement('td');
-            if (j===1) {
-                td.innerHTML = data[i][headNames[j]]['first'];
+            switch (j) {
+                case 1:
+                    td.innerHTML = data[i][HEADNAMES[j]]['first'];
+                    break;
+                case 2:
+                    td.innerHTML = data[i][HEADNAMES[j]]['last'];
+                    break;
+                case 4:
+                    data[i][HEADNAMES[j]].forEach(function (item) {
+                        td.innerHTML += item + '</br>';
+                    });
+                    break;
+                case 5:
+                    let img = document.createElement('img');
+                    img.src = data[i][HEADNAMES[j]].toString();
+                    td.appendChild(img);
+                    break;
+                default:
+                    td.innerHTML = data[i][HEADNAMES[j]];
+                    break;
             }
-            else if (j===2){
-                td.innerHTML = data[i][headNames[j]]['last'];
-            }
-            else if (j===4){
-                data[i][headNames[j]].forEach(function (item) {
-                    td.innerHTML += item + '</br>';
-                })
-            }
-            else if (j===5){
-                let img = document.createElement('img');
-                img.src = data[i][headNames[j]].toString();
-                td.appendChild(img);
-            }
-            else td.innerHTML = data[i][headNames[j]];
             tr[i].appendChild(td);
         }
         table.appendChild(tr[i]);
@@ -58,8 +61,7 @@ function createTable(data, headings) {
     document.getElementById('tablearea').appendChild(table);
 }
 
-function highlight(phrase, table) {
-    let arrCols = checkCols();
+function highlight(phrase, table, arrCols) {
     let pattern = new RegExp(phrase.trim(),'ig');
     let count = 0;
     for (let i = 1; i < rowNum + 1; i++){
@@ -87,14 +89,14 @@ function deleteOldSpans(table) {
 
 function filter(phrase, table, e) { //TODO запрещенные символы [ \ ^ $ . | ? * + ( )
     e.preventDefault();
-    let colsArr = checkCols();
+    let arrCols = checkCols();
     deleteOldSpans(table);
     let pattern = new RegExp(phrase.trim(), 'i');
     let findFlag = false;
     for (let i = 1; i < rowNum + 1 ; i++) {
         findFlag = false;
         for (let j = 0; j < colNum - 1; j++){
-            if (colsArr[j]) {
+            if (arrCols[j]) {
                 findFlag = pattern.test(table.rows[i].cells[j].innerHTML.replace(/<br>/g, ''));
                 if (findFlag) break;
             }
@@ -104,7 +106,7 @@ function filter(phrase, table, e) { //TODO запрещенные символы
         }
         else table.rows[i].classList.add('notFind');
     }
-    let count = highlight(phrase, table);
+    let count = highlight(phrase, table, arrCols);
     let findLabel = document.getElementById("findLabel");
     findLabel.innerHTML = `Строк найдено: ${75-document.getElementsByClassName('notFind').length}`;
     if (count) findLabel.innerHTML += `; Совпадений: ${count}`;
@@ -153,7 +155,7 @@ function closeModal(e) {
     let close = document.getElementsByClassName('close')[0];
     if (e.target===modal ||e.target===close) modal.style.display = 'none';
 }
-createTable(data, headings);
+createTable(data, HEADINGS);
 
 let filter_btn = document.getElementById('filter-btn');
 let table = document.querySelectorAll('#tablearea table')[0];
