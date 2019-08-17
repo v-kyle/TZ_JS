@@ -1,30 +1,11 @@
 //TODO: Комментировать код
 import data from "./json.js";
 
+// Const UpperCase
 let headings = ["Идентификатор", "Имя", "Фамилия", "Пол", "Ключевые фразы", "Изображение"];
 const rowNum = data.length;
 const colNum = 6;
 let headNames = ['id', 'name', 'name', 'gender', 'memo', 'img'];
-
-function checkCols() {
-    let searchCols = [1,1,1,1,1];
-    let checkBoxes = document.querySelectorAll('#searchCols input');
-    checkBoxes.forEach((elem, index)=>{
-        if (!elem.checked) searchCols[index] = 0;
-    });
-    return searchCols;
-}
-
-function fillHeadings(table, headings) {
-
-    let tr = document.createElement('tr');
-    for (let j = 0; j < colNum; j++){
-        let th = document.createElement('th');
-        th.innerHTML = headings[j];
-        tr.appendChild(th);
-    }
-    table.appendChild(tr);
-}
 
 function createTable(data, headings) {
     let table = document.createElement('table');
@@ -34,12 +15,14 @@ function createTable(data, headings) {
         tr[i] = document.createElement('tr');
         for (let j = 0; j < colNum; j++) {
             let td = document.createElement('td');
+            // Switch
             if (j===1) {
                 td.innerHTML = data[i][headNames[j]]['first'];
             }
             else if (j===2){
                 td.innerHTML = data[i][headNames[j]]['last'];
             }
+            // Where is 3?
             else if (j===4){
                 data[i][headNames[j]].forEach(function (item) {
                     td.innerHTML += item + '</br>';
@@ -58,31 +41,14 @@ function createTable(data, headings) {
     document.getElementById('tablearea').appendChild(table);
 }
 
-function highlight(phrase, table) {
-    let arrCols = checkCols();
-    let pattern = new RegExp(phrase.trim(),'ig');
-    let count = 0;
-    for (let i = 1; i < rowNum + 1; i++){
-        if (!table.rows[i].classList.contains('notFind'))
-        for (let j = 0; j < colNum - 1; j++) {
-            if (~table.rows[i].cells[j].innerHTML.toUpperCase().indexOf(phrase.trim().toUpperCase()) && phrase.trim()!=="" && arrCols[j]) {
-                count += table.rows[i].cells[j].innerHTML.match(pattern).length;
-                table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(pattern, '<span class="highlight">$&</span>');
-            }
-        }
+function fillHeadings(table, headings) {
+    let tr = document.createElement('tr');
+    for (let j = 0; j < colNum; j++){
+        let th = document.createElement('th');
+        th.innerHTML = headings[j];
+        tr.appendChild(th);
     }
-    return count;
-}
-
-function deleteOldSpans(table) {
-    let deleteSpan1 = /<span class="highlight">/ig;
-    let deleteSpan2 = /<\/span>/ig;
-    for (let i = 1; i < rowNum +1 ; i++) {
-        for (let j = 0; j < colNum - 1; j++) {
-            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan1, "");
-            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan2, "");
-        }
-    }
+    table.appendChild(tr);
 }
 
 function filter(phrase, table, e) { //TODO запрещенные символы [ \ ^ $ . | ? * + ( )
@@ -91,8 +57,10 @@ function filter(phrase, table, e) { //TODO запрещенные символы
     deleteOldSpans(table);
     let pattern = new RegExp(phrase.trim(), 'i');
     let findFlag = false;
+    // Учитываем шапку
     for (let i = 1; i < rowNum + 1 ; i++) {
         findFlag = false;
+        // Изображения
         for (let j = 0; j < colNum - 1; j++){
             if (colsArr[j]) {
                 findFlag = pattern.test(table.rows[i].cells[j].innerHTML.replace(/<br>/g, ''));
@@ -111,6 +79,45 @@ function filter(phrase, table, e) { //TODO запрещенные символы
     findLabel.classList.remove('hidden');
 }
 
+function checkCols() {
+    let searchCols = [1,1,1,1,1]; // Boolean
+    let checkBoxes = document.querySelectorAll('#searchCols input');
+    checkBoxes.forEach((elem, index)=>{
+        if (!elem.checked) searchCols[index] = 0;
+    });
+    return searchCols;
+}
+
+function deleteOldSpans(table) {
+    let deleteSpan1 = /<span class="highlight">/ig;
+    let deleteSpan2 = /<\/span>/ig;
+    for (let i = 1; i < rowNum +1 ; i++) {
+        for (let j = 0; j < colNum - 1; j++) {
+            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan1, "");
+            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan2, "");
+        }
+    }
+}
+
+// Передать checkCols
+function highlight(phrase, table) {
+    let arrCols = checkCols();
+    let pattern = new RegExp(phrase.trim(),'ig');
+    let count = 0;
+    for (let i = 1; i < rowNum + 1; i++){
+        if (!table.rows[i].classList.contains('notFind'))
+        for (let j = 0; j < colNum - 1; j++) {
+            // LowerCase
+            if (~table.rows[i].cells[j].innerHTML.toUpperCase().indexOf(phrase.trim().toUpperCase()) && phrase.trim()!=="" && arrCols[j]) {
+                count += table.rows[i].cells[j].innerHTML.match(pattern).length;
+                table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(pattern, '<span class="highlight">$&</span>');
+            }
+        }
+    }
+    return count;
+}
+
+// =========================================
 function hideCol(e) {
     let table = document.querySelectorAll('#tablearea table')[0];
     e.target.classList.toggle('notActiveBtn');
@@ -148,11 +155,14 @@ function editRow(e) {
         }
     }
 }
+
 function closeModal(e) {
     let modal = document.querySelector('.modal');
     let close = document.getElementsByClassName('close')[0];
     if (e.target===modal ||e.target===close) modal.style.display = 'none';
 }
+
+// Загрузка
 createTable(data, headings);
 
 let filter_btn = document.getElementById('filter-btn');
@@ -167,5 +177,3 @@ table.addEventListener('click', editRow);
 
 document.getElementsByClassName('close')[0].addEventListener('click',closeModal);
 document.getElementsByClassName('modal')[0].addEventListener('click',closeModal);
-
-
