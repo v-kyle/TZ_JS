@@ -85,7 +85,7 @@ function deleteOldSpans(table) {
     }
 }
 
-function filter(phrase, table, e) {
+function filter(phrase, table, e) { //TODO запрещенные символы [ \ ^ $ . | ? * + ( )
     e.preventDefault();
     let colsArr = checkCols();
     deleteOldSpans(table);
@@ -126,8 +126,26 @@ function editRow(e) {
     let row = e.target.closest('tr');
     if (row && table.contains(row) && row.rowIndex!==0){
         modal.style.display = "flex";
-        let modal_body = document.querySelector('.modal .modal-body');
-
+        document.getElementById('modal-id').value = row.cells[0].innerHTML;
+        document.getElementById('modal-first').value = row.cells[1].innerHTML;
+        document.getElementById('modal-last').value = row.cells[2].innerHTML;
+        if (row.cells[3].innerHTML === "Male"){
+            document.getElementById('modal-gender-male').checked = true;
+            document.getElementById('modal-gender-female').checked = false;
+        }
+        else{
+            document.getElementById('modal-gender-male').checked = false;
+            document.getElementById('modal-gender-female').checked = true;
+        }
+        document.getElementById('modal-memo').innerHTML = row.cells[4].innerHTML.replace(/<br>/g, "\n");
+        if (row.cells[5].children[0].style.visibility !== 'hidden' ){
+            document.getElementById('modal-img-show').checked = true;
+            document.getElementById('modal-img-hide').checked = false;
+        }
+        else{
+            document.getElementById('modal-img-show').checked = false;
+            document.getElementById('modal-img-hide').checked = true;
+        }
     }
 }
 function closeModal(e) {
