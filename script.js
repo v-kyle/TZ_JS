@@ -143,12 +143,30 @@ function editRow(e) {
             document.getElementById('modal-img-show').checked = false;
             document.getElementById('modal-img-hide').checked = true;
         }
+        let modal_btn = document.getElementById('modal-btn');
+        modal_btn.dataset.row = row.rowIndex.toString();
+    }
+}
+function saveChanges(e) {
+    e.preventDefault();
+    let index = +e.target.dataset.row;
+    let table = document.querySelector('#tablearea table');
+    let row = table.rows[index];
+    if (row){
+        row.cells[0].innerHTML = document.getElementById('modal-id').value;
+        row.cells[1].innerHTML = document.getElementById('modal-first').value;
+        row.cells[2].innerHTML = document.getElementById('modal-last').value;
+        row.cells[3].innerHTML = (document.getElementById('modal-gender-male').checked === true) ? "Male" : "Female";
+        row.cells[4].innerHTML = document.getElementById('modal-memo').value.replace(/\n/g,"<br>");
+        row.cells[5].children[0].style.visibility = (document.getElementById('modal-img-show').checked === true) ? "visible" : "hidden";
+        closeModal(e);
     }
 }
 function closeModal(e) {
     let modal = document.querySelector('.modal');
     let close = document.getElementsByClassName('close')[0];
-    if (e.target===modal ||e.target===close) modal.style.display = 'none';
+    let btn = document.getElementById('modal-btn');
+    if (e.target===close || e.target === btn) modal.style.display = 'none';
 }
 
 if (document.readyState === 'loading') {
@@ -168,6 +186,6 @@ filter_btn.addEventListener('click',(e)=>filter(filter_input.value, table, e));
 table.addEventListener('click', editRow);
 
 document.getElementsByClassName('close')[0].addEventListener('click',closeModal);
-document.getElementsByClassName('modal')[0].addEventListener('click',closeModal);
+document.getElementById('modal-btn').addEventListener("click", saveChanges);
 
 
