@@ -1,17 +1,17 @@
-import data from "./json.js";
+import data from "./json.js"; //Импорт данного JSON
 
-let num = 0;
+let num = 0;                 //отвечает за показ опредленной десятки строк
 
-function showData(data, tenIndex) {
-    let btnB = document.getElementById('btn-b');
-    let btnN = document.getElementById('btn-n');
-    if (tenIndex > 0) {
+function showData(data, tenIndex) {          //функция парсинга JSON и вставки строк в документ
+    let btnB = document.getElementById('btn-b'); //кнопка "Предыдущие"
+    let btnN = document.getElementById('btn-n'); //кнопка "Следующие"
+    if (tenIndex > 0) {                     //если есть предыдущие элементы, показываем соответствующую кнопку, иначе скрываем
         btnB.style.visibility = "visible";
     }
     else{
         btnB.style.visibility = "hidden";
     }
-    if (tenIndex > (data.length)/10-1){
+    if (tenIndex > (data.length)/10-1){  //если нет следующих элементов, скрываем соответствующую кнопку, иначе показываем
         btnN.style.visibility = "hidden";
     }
     else {
@@ -43,13 +43,13 @@ function showData(data, tenIndex) {
     textarea.appendChild(p);
 }
 
-if (document.readyState === 'loading') {
+if (document.readyState === 'loading') {                    //если документ готов, показываем информацию
     document.addEventListener('DOMContentLoaded', ()=>showData(data, num));
 } else {
     showData(data, num);
 }
 
-let btnB = document.getElementById('btn-b');
-let btnN = document.getElementById('btn-n');
-btnB.addEventListener("click", ()=>showData(data, --num));
-btnN.addEventListener("click", ()=>showData(data, ++num));
+let btnB = document.getElementById('btn-b');  //кнопка "Предыдущие"
+let btnN = document.getElementById('btn-n'); //кнопка "Следующие"
+btnB.addEventListener("click", ()=>showData(data, --num)); //слушатель для показа предыдущих строк
+btnN.addEventListener("click", ()=>showData(data, ++num)); //слушатель для показа следующих строк
