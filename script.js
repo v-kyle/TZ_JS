@@ -183,9 +183,15 @@ document.querySelectorAll('#hideCols button').forEach((elem)=>elem.addEventListe
 
 filter_btn.addEventListener('click',(e)=>filter(filter_input.value, table, e));
 
+document.getElementById('pagedata-btn').addEventListener("click", function () {
+   window.open('data.html');
+});
+
 table.addEventListener('click', editRow);
 
 document.getElementsByClassName('close')[0].addEventListener('click',closeModal);
 document.getElementById('modal-btn').addEventListener("click", saveChanges);
+
+
 
 

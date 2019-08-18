@@ -17,9 +17,6 @@ html,body{
     justify-content: space-around;
     align-items: center;
 }
-#filter{
-
-}
 #filter label{
     font-weight: bold;
 }
@@ -50,9 +47,13 @@ html,body{
     width: 20px;
     height: 20px;
 }
-#hideCols{
-    width: 100%;
+#tools2{
     border-bottom: 1px solid gray;
+    width: 100%;
+    display: flex;
+}
+#hideCols{
+    width: 75%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -75,6 +76,21 @@ html,body{
 }
 .notActiveBtn{
     background: grey;
+}
+#pagedata{
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 25%;
+}
+#pagedata-btn{
+    cursor: pointer;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 4px 8px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    background: #8aacc8;
 }
 #findLabel{
     background: rgba(255,255,0,0.5);
