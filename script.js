@@ -5,26 +5,6 @@ const HEADNAMES = ['id', 'name', 'name', 'gender', 'memo', 'img'];
 const rowNum = data.length;
 const colNum = 6;
 
-function checkCols() {
-    let searchCols = (new Array(5)).fill(true, 0, 5);
-    let checkBoxes = document.querySelectorAll('#searchCols input');
-    checkBoxes.forEach((elem, index)=>{
-        if (!elem.checked) searchCols[index] = false;
-    });
-    return searchCols;
-}
-
-function fillHeadings(table, headings) {
-
-    let tr = document.createElement('tr');
-    for (let j = 0; j < colNum; j++){
-        let th = document.createElement('th');
-        th.innerHTML = headings[j];
-        tr.appendChild(th);
-    }
-    table.appendChild(tr);
-}
-
 function createTable(data, headings) {
     let table = document.createElement('table');
     fillHeadings(table, headings);
@@ -60,38 +40,22 @@ function createTable(data, headings) {
     }
     document.getElementById('tablearea').appendChild(table);
 }
-
-function highlight(phrase, table, arrCols) {
-    let pattern = new RegExp(phrase.trim(),'ig');
-    let count = 0;
-    for (let i = 1; i < rowNum + 1; i++){
-        if (!table.rows[i].classList.contains('notFind'))
-        for (let j = 0; j < colNum - 1; j++) {
-            if (~table.rows[i].cells[j].innerHTML.toUpperCase().indexOf(phrase.trim().toUpperCase()) && phrase.trim()!=="" && arrCols[j]) {
-                count += table.rows[i].cells[j].innerHTML.match(pattern).length;
-                table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(pattern, '<span class="highlight">$&</span>');
-            }
-        }
+function fillHeadings(table, headings) {
+    let tr = document.createElement('tr');
+    for (let j = 0; j < colNum; j++){
+        let th = document.createElement('th');
+        th.innerHTML = headings[j];
+        tr.appendChild(th);
     }
-    return count;
+    table.appendChild(tr);
 }
-
-function deleteOldSpans(table) {
-    let deleteSpan1 = /<span class="highlight">/ig;
-    let deleteSpan2 = /<\/span>/ig;
-    for (let i = 1; i < rowNum +1 ; i++) {
-        for (let j = 0; j < colNum - 1; j++) {
-            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan1, "");
-            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan2, "");
-        }
-    }
-}
-
 function filter(phrase, table, e) { //TODO запрещенные символы [ \ ^ $ . | ? * + ( )
     e.preventDefault();
+    phrase = phrase.trim();
+    let new_phrase = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     let arrCols = checkCols();
     deleteOldSpans(table);
-    let pattern = new RegExp(phrase.trim(), 'i');
+    let pattern = new RegExp(new_phrase, 'i');
     let findFlag = false;
     for (let i = 1; i < rowNum + 1 ; i++) {
         findFlag = false;
@@ -112,7 +76,39 @@ function filter(phrase, table, e) { //TODO запрещенные символы
     if (count) findLabel.innerHTML += `; Совпадений: ${count}`;
     findLabel.classList.remove('hidden');
 }
-
+function checkCols() {
+    let searchCols = (new Array(5)).fill(true, 0, 5);
+    let checkBoxes = document.querySelectorAll('#searchCols input');
+    checkBoxes.forEach((elem, index)=>{
+        if (!elem.checked) searchCols[index] = false;
+    });
+    return searchCols;
+}
+function deleteOldSpans(table) {
+    let deleteSpan1 = /<span class="highlight">/ig;
+    let deleteSpan2 = /<\/span>/ig;
+    for (let i = 1; i < rowNum +1 ; i++) {
+        for (let j = 0; j < colNum - 1; j++) {
+            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan1, "");
+            table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(deleteSpan2, "");
+        }
+    }
+}
+function highlight(phrase, table, arrCols) {
+    let new_phrase = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    let pattern = new RegExp(new_phrase,'ig');
+    let count = 0;
+    for (let i = 1; i < rowNum + 1; i++){
+        if (!table.rows[i].classList.contains('notFind'))
+        for (let j = 0; j < colNum - 1; j++) {
+            if (~table.rows[i].cells[j].innerHTML.toLowerCase().indexOf(phrase.toLowerCase()) && phrase!=="" && arrCols[j]) {
+                count += table.rows[i].cells[j].innerHTML.match(pattern).length;
+                table.rows[i].cells[j].innerHTML = table.rows[i].cells[j].innerHTML.replace(pattern, '<span class="highlight">$&</span>');
+            }
+        }
+    }
+    return count;
+}
 function hideCol(e) {
     let table = document.querySelectorAll('#tablearea table')[0];
     e.target.classList.toggle('notActiveBtn');
@@ -121,7 +117,6 @@ function hideCol(e) {
     for (let i = 0; i < rowNum + 1; i++)
         table.rows[i].cells[num].classList.toggle('notFind');
 }
-
 function editRow(e) {
     let modal = document.querySelector('.modal');
     let table = document.querySelectorAll('#tablearea table')[0];
@@ -155,7 +150,12 @@ function closeModal(e) {
     let close = document.getElementsByClassName('close')[0];
     if (e.target===modal ||e.target===close) modal.style.display = 'none';
 }
-createTable(data, HEADINGS);
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ()=>createTable(data, HEADINGS));
+} else {
+    createTable(data, HEADINGS);
+}
 
 let filter_btn = document.getElementById('filter-btn');
 let table = document.querySelectorAll('#tablearea table')[0];
